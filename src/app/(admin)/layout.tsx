@@ -1,5 +1,6 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { AdminNav } from "@/components/admin/admin-nav";
+import { LiveNotifications } from "@/components/admin/live-notifications";
 import { Toaster } from "@/components/ui/sonner";
 import { countUnreadAdminNotifications } from "@/lib/db/notifications";
 
@@ -28,6 +29,7 @@ export default async function AdminLayout({
       <div className="flex min-w-0 flex-1 flex-col">
         <main className="flex-1">{children}</main>
         <Toaster richColors position="top-right" />
+        <LiveNotifications />
       </div>
     </div>
   );
