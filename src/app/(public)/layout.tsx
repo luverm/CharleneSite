@@ -51,20 +51,23 @@ export default async function PublicLayout({
 
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="sticky top-0 z-30 border-b bg-background/80 backdrop-blur">
+      <header className="sticky top-0 z-30 bg-background/85 backdrop-blur">
         <nav className="mx-auto flex h-20 max-w-6xl items-center justify-between px-4">
           <Link
             href="/"
             aria-label={business.name}
-            className="shrink-0 text-xl tracking-tight"
+            className="shrink-0 font-serif text-2xl italic tracking-tight"
           >
             {business.name}
           </Link>
 
-          <ul className="hidden items-center gap-6 text-sm md:flex">
+          <ul className="hidden items-center gap-8 text-xs uppercase tracking-[0.18em] md:flex">
             {navLinks.map((link) => (
               <li key={link.href}>
-                <Link href={link.href} className="hover:text-foreground/70">
+                <Link
+                  href={link.href}
+                  className="text-foreground/80 transition hover:text-foreground"
+                >
                   {link.label}
                 </Link>
               </li>
@@ -72,7 +75,7 @@ export default async function PublicLayout({
             <li>
               <Link
                 href="/boeken"
-                className="rounded-full bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90"
+                className="rounded-sm bg-accent px-5 py-2.5 text-accent-foreground transition hover:bg-accent/90"
               >
                 Boek afspraak
               </Link>
@@ -83,29 +86,32 @@ export default async function PublicLayout({
             <MobileNav />
           </div>
         </nav>
+        <div className="h-px bg-border/60" aria-hidden />
       </header>
 
       <main className="flex-1">{children}</main>
 
-      <footer className="mt-16 border-t bg-muted/30">
-        <div className="mx-auto max-w-6xl px-4 py-12">
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-5">
+      <footer className="mt-24 border-t bg-primary text-primary-foreground">
+        <div className="mx-auto max-w-6xl px-4 py-16">
+          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-5">
             <div>
-              <p className="text-base font-semibold">{business.name}</p>
-              <p className="mt-2 whitespace-pre-line text-sm text-muted-foreground">
+              <p className="font-serif text-2xl italic">{business.name}</p>
+              <p className="mt-3 whitespace-pre-line text-sm text-primary-foreground/70">
                 {content["site.tagline"]}
               </p>
             </div>
 
             {(isFilled(business.email) || isFilled(business.phone)) && (
               <div>
-                <p className="text-sm font-medium">Contact</p>
-                <ul className="mt-2 space-y-1 text-sm text-muted-foreground">
+                <p className="text-xs uppercase tracking-[0.15em] text-primary-foreground/50">
+                  Contact
+                </p>
+                <ul className="mt-3 space-y-1 text-sm text-primary-foreground/80">
                   {isFilled(business.email) && (
                     <li>
                       <a
                         href={`mailto:${business.email}`}
-                        className="hover:text-foreground"
+                        className="transition hover:text-primary-foreground"
                       >
                         {business.email}
                       </a>
@@ -117,8 +123,10 @@ export default async function PublicLayout({
             )}
 
             <div>
-              <p className="text-sm font-medium">Adres</p>
-              <ul className="mt-2 space-y-1 text-sm text-muted-foreground">
+              <p className="text-xs uppercase tracking-[0.15em] text-primary-foreground/50">
+                Adres
+              </p>
+              <ul className="mt-3 space-y-1 text-sm text-primary-foreground/80">
                 <li>{business.address.street}</li>
                 <li>
                   {business.address.postcode} {business.address.city}
@@ -128,8 +136,10 @@ export default async function PublicLayout({
 
             {hasOpeningHours && (
               <div>
-                <p className="text-sm font-medium">Openingstijden</p>
-                <ul className="mt-2 space-y-1 text-sm text-muted-foreground">
+                <p className="text-xs uppercase tracking-[0.15em] text-primary-foreground/50">
+                  Openingstijden
+                </p>
+                <ul className="mt-3 space-y-1 text-sm text-primary-foreground/80">
                   {OPENING_DAYS.map((d) => {
                     const ranges = openingByDay.get(d.weekday) ?? [];
                     return (
@@ -146,15 +156,17 @@ export default async function PublicLayout({
             )}
 
             <div>
-              <p className="text-sm font-medium">Volg</p>
-              <ul className="mt-2 space-y-1 text-sm text-muted-foreground">
+              <p className="text-xs uppercase tracking-[0.15em] text-primary-foreground/50">
+                Volg
+              </p>
+              <ul className="mt-3 space-y-1 text-sm text-primary-foreground/80">
                 {isFilled(business.socials.instagram) && (
                   <li>
                     <a
                       href={business.socials.instagramUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="hover:text-foreground"
+                      className="transition hover:text-primary-foreground"
                     >
                       Instagram · @{business.socials.instagram}
                     </a>
@@ -167,7 +179,7 @@ export default async function PublicLayout({
             </div>
           </div>
 
-          <div className="mt-8 flex flex-col items-start justify-between gap-2 border-t pt-6 text-xs text-muted-foreground md:flex-row">
+          <div className="mt-12 flex flex-col items-start justify-between gap-2 border-t border-primary-foreground/15 pt-6 text-xs text-primary-foreground/60 md:flex-row">
             <p>
               {[
                 isFilled(business.kvk) && `KvK ${business.kvk}`,

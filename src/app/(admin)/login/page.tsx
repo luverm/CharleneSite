@@ -21,19 +21,20 @@ export default async function LoginPage({
   const params = await searchParams;
   return (
     <div className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-4 py-16">
-      <h1 className="text-2xl font-semibold tracking-tight">
-        {business.name} — admin
+      <p className="text-xs uppercase tracking-[0.2em] text-accent">Admin</p>
+      <h1 className="mt-4 font-serif text-4xl italic tracking-tight">
+        {business.name}
       </h1>
-      <p className="mt-2 text-sm text-muted-foreground">
+      <p className="mt-4 text-sm text-muted-foreground">
         Log in met je e-mailadres en wachtwoord.
       </p>
 
-      <div className="mt-8">
+      <div className="mt-10">
         <LoginForm />
       </div>
 
       {params?.error && (
-        <p className="mt-6 rounded border border-red-200 bg-red-50 p-3 text-xs text-red-700">
+        <p className="mt-6 rounded-sm border border-red-200 bg-red-50 p-3 text-xs text-red-700">
           Inloggen mislukt. Probeer het opnieuw.
         </p>
       )}

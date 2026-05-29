@@ -79,13 +79,13 @@ export default async function BevestigdPage({
       <div className="mt-10 flex flex-col gap-3 sm:flex-row">
         <Link
           href="/portfolio"
-          className="inline-flex items-center justify-center rounded-full border border-border px-5 py-2 text-sm hover:bg-accent hover:text-accent-foreground"
+          className="inline-flex items-center justify-center rounded-sm border border-foreground/20 px-5 py-3 text-xs uppercase tracking-[0.18em] transition hover:border-foreground hover:bg-foreground hover:text-background"
         >
           Bekijk portfolio
         </Link>
         <Link
           href="/"
-          className="inline-flex items-center justify-center rounded-full bg-primary px-5 py-2 text-sm text-primary-foreground hover:bg-primary/90"
+          className="inline-flex items-center justify-center rounded-sm bg-accent px-5 py-3 text-xs uppercase tracking-[0.18em] text-accent-foreground transition hover:bg-accent/90"
         >
           Terug naar de site
         </Link>

@@ -22,13 +22,15 @@ export function MobileNav() {
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger
         aria-label="Open menu"
-        className="inline-flex h-9 w-9 items-center justify-center rounded-md hover:bg-accent"
+        className="inline-flex h-9 w-9 items-center justify-center rounded-sm hover:bg-secondary"
       >
         <Menu className="h-5 w-5" />
       </SheetTrigger>
       <SheetContent side="right" className="w-72">
         <SheetHeader>
-          <SheetTitle>Menu</SheetTitle>
+          <SheetTitle className="font-serif text-2xl italic tracking-tight">
+            Menu
+          </SheetTitle>
         </SheetHeader>
         <nav className="mt-6 flex flex-col gap-1 px-2">
           {links.map((link) => (
@@ -36,7 +38,7 @@ export function MobileNav() {
               key={link.href}
               href={link.href}
               onClick={() => setOpen(false)}
-              className="rounded px-2 py-2 text-base hover:bg-accent"
+              className="rounded-sm px-2 py-2 text-base hover:bg-secondary"
             >
               {link.label}
             </Link>
@@ -44,7 +46,7 @@ export function MobileNav() {
           <Link
             href="/boeken"
             onClick={() => setOpen(false)}
-            className="mt-3 rounded-full bg-foreground px-4 py-2 text-center text-sm text-background"
+            className="mt-4 rounded-sm bg-accent px-4 py-2.5 text-center text-xs uppercase tracking-[0.18em] text-accent-foreground"
           >
             Boek afspraak
           </Link>

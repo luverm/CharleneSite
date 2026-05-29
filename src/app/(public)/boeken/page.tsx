@@ -148,12 +148,14 @@ export default async function BoekenPage({
       : undefined;
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-16">
+    <div className="mx-auto max-w-6xl px-4 py-20">
       <header className="mb-12 max-w-2xl">
-        <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
+        <p className="text-xs uppercase tracking-[0.2em] text-accent">
           Online boeken
         </p>
-        <h1 className="mt-4 text-5xl tracking-tight">Boek je afspraak</h1>
+        <h1 className="mt-5 text-5xl tracking-tight sm:text-6xl">
+          Boek je afspraak
+        </h1>
         <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
           Kies een dienst, een datum en een tijd. Bevestiging volgt direct per
           e-mail, met agenda-bijlage.

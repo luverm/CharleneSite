@@ -78,28 +78,28 @@ export default async function HomePage() {
       />
 
       {/* Hero */}
-      <section className="relative isolate overflow-hidden border-b bg-gradient-to-br from-accent/40 via-background to-muted/40">
+      <section className="relative isolate overflow-hidden bg-background">
         <HeroCarousel slides={heroSlides} />
-        <div className="relative mx-auto max-w-6xl px-4 py-28 md:py-40">
-          <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
+        <div className="relative mx-auto max-w-6xl px-4 py-28 md:py-44">
+          <p className="font-serif text-sm italic tracking-wide text-accent">
             {content["home.hero.eyebrow"]}
           </p>
-          <h1 className="mt-6 max-w-3xl text-pretty text-4xl tracking-tight sm:text-5xl md:text-7xl">
+          <h1 className="mt-6 max-w-3xl text-pretty text-5xl tracking-tight sm:text-6xl md:text-[5.5rem]">
             {content["home.hero.title"]}
           </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
+          <p className="mt-8 max-w-2xl text-lg leading-relaxed text-muted-foreground">
             {content["home.hero.subtitle"]}
           </p>
-          <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+          <div className="mt-12 flex flex-col gap-3 sm:flex-row">
             <Link
               href={landing.hero.primaryCta.href}
-              className="inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 text-base text-primary-foreground shadow-sm transition hover:bg-primary/90"
+              className="inline-flex items-center justify-center rounded-sm bg-accent px-7 py-3.5 text-sm uppercase tracking-[0.18em] text-accent-foreground transition hover:bg-accent/90"
             >
               {content["home.hero.cta1"]}
             </Link>
             <Link
               href={landing.hero.secondaryCta.href}
-              className="inline-flex items-center justify-center rounded-full border border-border bg-background/60 px-6 py-3 text-base transition hover:bg-accent hover:text-accent-foreground"
+              className="inline-flex items-center justify-center rounded-sm border border-foreground/20 px-7 py-3.5 text-sm uppercase tracking-[0.18em] transition hover:border-foreground hover:bg-foreground hover:text-background"
             >
               {content["home.hero.cta2"]}
             </Link>
@@ -108,13 +108,16 @@ export default async function HomePage() {
       </section>
 
       {/* Services preview */}
-      <section className="mx-auto max-w-6xl px-4 py-20">
+      <section className="mx-auto max-w-6xl px-4 py-24">
         <div className="flex items-end justify-between gap-4">
           <div>
-            <h2 className="text-3xl font-semibold tracking-tight">
+            <p className="text-xs uppercase tracking-[0.2em] text-accent">
+              Diensten
+            </p>
+            <h2 className="mt-4 text-4xl tracking-tight sm:text-5xl">
               {content["home.services.title"]}
             </h2>
-            <p className="mt-2 text-muted-foreground">
+            <p className="mt-4 max-w-xl text-muted-foreground">
               Een greep uit het aanbod. Bekijk{" "}
               <Link href="/diensten" className="underline underline-offset-4">
                 alle diensten
@@ -123,7 +126,7 @@ export default async function HomePage() {
             </p>
           </div>
         </div>
-        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {previewServices.map((service) => (
             <ServiceCard key={service.id} service={service} />
           ))}
@@ -131,40 +134,45 @@ export default async function HomePage() {
       </section>
 
       {/* Portfolio strip */}
-      <section className="border-y bg-muted/30">
-        <div className="mx-auto max-w-6xl px-4 py-20">
+      <section className="border-y border-border bg-secondary/40">
+        <div className="mx-auto max-w-6xl px-4 py-24">
           <div className="flex items-end justify-between gap-4">
-            <h2 className="text-3xl font-semibold tracking-tight">
-              {content["home.portfolio.title"]}
-            </h2>
+            <div>
+              <p className="text-xs uppercase tracking-[0.2em] text-accent">
+                Werk
+              </p>
+              <h2 className="mt-4 text-4xl tracking-tight sm:text-5xl">
+                {content["home.portfolio.title"]}
+              </h2>
+            </div>
             <Link
               href="/portfolio"
-              className="text-sm underline underline-offset-4"
+              className="text-xs uppercase tracking-[0.18em] underline underline-offset-[6px]"
             >
               Bekijk alles
             </Link>
           </div>
-          <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+          <div className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
             {portfolioStrip.length > 0
               ? portfolioStrip.map((img) => (
                   <Link
                     key={img.src}
                     href="/portfolio"
-                    className="relative block aspect-square overflow-hidden rounded-lg bg-muted"
+                    className="relative block aspect-square overflow-hidden rounded-sm bg-muted"
                   >
                     <Image
                       src={img.src}
                       alt={img.alt}
                       fill
                       sizes="(min-width: 1024px) 16vw, (min-width: 640px) 33vw, 50vw"
-                      className="object-cover transition-transform duration-300 hover:scale-105"
+                      className="object-cover transition-transform duration-500 hover:scale-105"
                     />
                   </Link>
                 ))
               : Array.from({ length: 6 }).map((_, i) => (
                   <div
                     key={i}
-                    className="aspect-square rounded-lg bg-muted"
+                    className="aspect-square rounded-sm bg-muted"
                     aria-hidden
                   />
                 ))}
@@ -173,9 +181,9 @@ export default async function HomePage() {
       </section>
 
       {/* About */}
-      <section className="mx-auto max-w-6xl px-4 py-20">
-        <div className="grid gap-12 md:grid-cols-2 md:items-center">
-          <div className="relative aspect-[4/5] w-full overflow-hidden rounded-lg bg-muted md:order-last">
+      <section className="mx-auto max-w-6xl px-4 py-24">
+        <div className="grid gap-16 md:grid-cols-2 md:items-center">
+          <div className="relative aspect-[4/5] w-full overflow-hidden rounded-sm bg-muted md:order-last">
             <Image
               src={aboutImage}
               alt={business.name}
@@ -185,10 +193,10 @@ export default async function HomePage() {
             />
           </div>
           <div>
-            <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
+            <p className="text-xs uppercase tracking-[0.2em] text-accent">
               Over
             </p>
-            <h2 className="mt-4 text-4xl tracking-tight">
+            <h2 className="mt-4 text-4xl tracking-tight sm:text-5xl">
               {content["home.about.title"]}
             </h2>
             <p className="mt-6 whitespace-pre-line text-lg leading-relaxed text-muted-foreground">
@@ -199,23 +207,29 @@ export default async function HomePage() {
       </section>
 
       {/* Reviews or Instagram CTA */}
-      <section className="border-t bg-muted/30">
-        <div className="mx-auto max-w-6xl px-4 py-20">
+      <section className="border-t border-border bg-secondary/40">
+        <div className="mx-auto max-w-6xl px-4 py-24">
           {reviews.length > 0 ? (
             <>
-              <h2 className="text-3xl font-semibold tracking-tight">
+              <p className="text-xs uppercase tracking-[0.2em] text-accent">
+                Reviews
+              </p>
+              <h2 className="mt-4 text-4xl tracking-tight sm:text-5xl">
                 {content["home.reviews.title"]}
               </h2>
-              <div className="mt-10 grid gap-6 md:grid-cols-3">
+              <div className="mt-12 grid gap-6 md:grid-cols-3">
                 {reviews.map((r, i) => (
                   <figure
                     key={i}
-                    className="flex h-full flex-col rounded-lg border bg-background p-6"
+                    className="flex h-full flex-col rounded-sm border border-border bg-card p-7"
                   >
-                    <blockquote className="flex-1 text-base leading-relaxed">
-                      &ldquo;{r.quote}&rdquo;
+                    <p className="font-serif text-3xl leading-none text-accent" aria-hidden>
+                      &ldquo;
+                    </p>
+                    <blockquote className="mt-2 flex-1 text-base leading-relaxed">
+                      {r.quote}
                     </blockquote>
-                    <figcaption className="mt-4 text-sm text-muted-foreground">
+                    <figcaption className="mt-6 text-xs uppercase tracking-[0.15em] text-muted-foreground">
                       — {r.author}
                     </figcaption>
                   </figure>
@@ -225,10 +239,13 @@ export default async function HomePage() {
           ) : (
             <div className="flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between">
               <div className="max-w-xl">
-                <h2 className="text-3xl tracking-tight">
+                <p className="text-xs uppercase tracking-[0.2em] text-accent">
+                  Instagram
+                </p>
+                <h2 className="mt-4 text-4xl tracking-tight sm:text-5xl">
                   Volg het werk op Instagram
                 </h2>
-                <p className="mt-3 text-muted-foreground">
+                <p className="mt-4 text-muted-foreground">
                   Nieuwe looks en behind-the-scenes — bekijk het meest recente
                   werk op{" "}
                   <span className="font-medium text-foreground">
@@ -241,14 +258,14 @@ export default async function HomePage() {
                 href={business.socials.instagramUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 text-base text-primary-foreground shadow-sm transition hover:bg-primary/90"
+                className="inline-flex items-center justify-center rounded-sm bg-accent px-7 py-3.5 text-sm uppercase tracking-[0.18em] text-accent-foreground transition hover:bg-accent/90"
               >
                 Volg op Instagram
               </a>
             </div>
           )}
 
-          <div className="mt-12 border-t pt-8">
+          <div className="mt-16 border-t border-border pt-8">
             <p className="text-sm text-muted-foreground">
               Geweest? Deel je ervaring — na een korte controle verschijnt je
               review hier.

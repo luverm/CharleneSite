@@ -23,10 +23,10 @@ export const business = {
     tiktok: "",
   },
   brand: {
-    // Warm charcoal + zacht zand. Easy to tweak later.
-    primaryHex: "#3A332D",
-    accentHex: "#E8DCCB",
-    fontDisplay: "Cormorant Garamond",
+    // Editorial sage: forest-green primary, terracotta accent, ivory background.
+    primaryHex: "#2D4F3F",
+    accentHex: "#C2735C",
+    fontDisplay: "Fraunces",
     fontBody: "Inter",
   },
 } as const;
