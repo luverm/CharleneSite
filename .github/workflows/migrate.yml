@@ -1,0 +1,41 @@
+name: Supabase migrations
+
+# Applies new files in supabase/migrations/ to the production database.
+#
+# One-time setup (repo Settings -> Secrets and variables -> Actions):
+#   SUPABASE_DB_URL = the project's Postgres connection string
+#     (Supabase dashboard -> Project Settings -> Database ->
+#      Connection string -> URI, with the password filled in).
+#
+# IMPORTANT — baseline first: migrations 0001-0004 were already applied
+# by hand, so before enabling this, mark them as applied once so the
+# pipeline doesn't try to re-run 0001 (which would fail):
+#   supabase migration repair --status applied 0001 0002 0003 0004 \
+#     --db-url "$SUPABASE_DB_URL"
+# After that, every new numbered migration applies automatically on
+# merge to main. `db push` is additive; a failure aborts in a
+# transaction and changes nothing.
+
+on:
+  push:
+    branches: ["main"]
+    paths: ["supabase/migrations/**"]
+  workflow_dispatch:
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+      - name: Apply migrations
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: |
+          if [ -z "$SUPABASE_DB_URL" ]; then
+            echo "SUPABASE_DB_URL secret not set — skipping (configure it to enable auto-migrations)."
+            exit 0
+          fi
+          supabase db push --db-url "$SUPABASE_DB_URL"
