@@ -11,7 +11,7 @@ export default function robots(): MetadataRoute.Robots {
         disallow: [
           "/dashboard",
           "/boekingen",
-          "/leads",
+          "/notificaties",
           "/klanten",
           "/instellingen",
           "/login",

@@ -8,7 +8,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Badge } from "@/components/ui/badge";
 import { ServiceForm } from "@/components/admin/service-form";
 import type { Service } from "@/lib/services-format";
 import { formatPrice, formatDuration } from "@/lib/services-format";
@@ -29,9 +28,6 @@ export function ServiceRow({ service }: { service: Service }) {
             </p>
           </div>
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Badge variant={service.kind === "bridal" ? "secondary" : "outline"}>
-              {service.kind}
-            </Badge>
             <span>{formatDuration(service.duration_min)}</span>
             <span>{formatPrice(service.price_cents)}</span>
           </div>

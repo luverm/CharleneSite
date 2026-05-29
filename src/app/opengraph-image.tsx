@@ -24,7 +24,7 @@ export default function OGImage() {
         }}
       >
         <div style={{ fontSize: 28, opacity: 0.6, letterSpacing: 2, textTransform: "uppercase" }}>
-          Hair & bridal styling
+          Kapsalon
         </div>
         <div style={{ fontSize: 96, fontWeight: 600, marginTop: 24, lineHeight: 1.1 }}>
           {business.name}

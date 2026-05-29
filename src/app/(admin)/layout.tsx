@@ -1,6 +1,7 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { AdminNav } from "@/components/admin/admin-nav";
 import { Toaster } from "@/components/ui/sonner";
+import { countUnreadAdminNotifications } from "@/lib/db/notifications";
 
 export default async function AdminLayout({
   children,
@@ -18,9 +19,11 @@ export default async function AdminLayout({
     return <>{children}</>;
   }
 
+  const unreadCount = await countUnreadAdminNotifications();
+
   return (
     <div className="flex min-h-screen flex-col md:flex-row">
-      <AdminNav email={user.email ?? null} />
+      <AdminNav email={user.email ?? null} unreadCount={unreadCount} />
 
       <div className="flex min-w-0 flex-1 flex-col">
         <main className="flex-1">{children}</main>

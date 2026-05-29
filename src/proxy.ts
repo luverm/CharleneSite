@@ -4,7 +4,7 @@ import { createServerClient } from "@supabase/ssr";
 const PROTECTED_PREFIXES = [
   "/dashboard",
   "/boekingen",
-  "/leads",
+  "/notificaties",
   "/klanten",
   "/instellingen",
 ];
@@ -56,7 +56,7 @@ export const config = {
   matcher: [
     "/dashboard/:path*",
     "/boekingen/:path*",
-    "/leads/:path*",
+    "/notificaties/:path*",
     "/klanten/:path*",
     "/instellingen/:path*",
   ],

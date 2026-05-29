@@ -2,7 +2,6 @@ import { z } from "zod";
 
 const serverSchema = z.object({
   SUPABASE_SERVICE_ROLE_KEY: z.string().min(1),
-  ADMIN_NOTIFY_EMAIL: z.string().email(),
   ADMIN_ICS_TOKEN: z.string().min(16),
 });
 

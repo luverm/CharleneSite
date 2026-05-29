@@ -19,6 +19,7 @@ import { upsertCustomerByEmail } from "@/lib/db/customers";
 import { createSupabaseServiceClient } from "@/lib/supabase/service";
 import { sendEmail } from "@/lib/email/client";
 import { bookingCancelledEmail } from "@/lib/email/messages";
+import { recordAdminNotification } from "@/lib/db/notifications";
 import {
   sendBookingConfirmation,
   sendBookingAdminNotice,
@@ -293,23 +294,14 @@ export async function cancelOwnBooking(
     );
   }
 
-  const adminEmail = process.env.ADMIN_NOTIFY_EMAIL;
-  if (adminEmail) {
-    await safe(() =>
-      sendEmail({
-        to: adminEmail,
-        subject: `Afspraak geannuleerd — ${booking.service.name}`,
-        context: "booking_cancelled_admin",
-        text: [
-          "Een klant heeft zelf een afspraak geannuleerd.",
-          "",
-          `Dienst: ${booking.service.name}`,
-          `Klant: ${booking.customer.full_name} <${booking.customer.email}>`,
-          `Het slot is weer vrij.`,
-        ].join("\n"),
-      }),
-    );
-  }
+  await safe(() =>
+    recordAdminNotification({
+      kind: "booking_cancelled",
+      title: `Afspraak geannuleerd — ${booking.service.name}`,
+      body: `${booking.customer.full_name} <${booking.customer.email}> heeft zelf geannuleerd. Het slot is weer vrij.`,
+      href: `/boekingen/${booking.id}`,
+    }),
+  );
 
   await safe(() => notifyWaitlistForFreedBooking(id));
 

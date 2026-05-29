@@ -37,6 +37,5 @@ export async function saveSiteContentAction(
 
   revalidatePath("/");
   revalidatePath("/diensten");
-  revalidatePath("/bruid");
   return { ok: true };
 }

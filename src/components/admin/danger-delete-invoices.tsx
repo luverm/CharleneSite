@@ -33,9 +33,8 @@ export function DangerDeleteInvoices() {
     <div className="mt-10 rounded-lg border border-destructive/40 bg-destructive/5 p-6">
       <h2 className="text-base font-semibold text-destructive">Gevarenzone</h2>
       <p className="mt-1 text-sm text-muted-foreground">
-        Verwijdert <strong>alle</strong> facturen (boekingsfacturen én
-        bruidsfacturen, inclusief regelitems) definitief. Dit kan niet
-        ongedaan worden gemaakt.
+        Verwijdert <strong>alle</strong> facturen (inclusief regelitems)
+        definitief. Dit kan niet ongedaan worden gemaakt.
       </p>
 
       {!open ? (

@@ -7,7 +7,7 @@ import {
   LayoutDashboard,
   CalendarDays,
   CalendarClock,
-  Heart,
+  Bell,
   UserRound,
   MessageSquare,
   Settings,
@@ -15,19 +15,25 @@ import {
 } from "lucide-react";
 import { SignOutButton } from "@/components/admin/sign-out-button";
 
-type Item = { href: string; label: string; icon: LucideIcon };
+type Item = { href: string; label: string; icon: LucideIcon; badgeKey?: "unread" };
 
 const NAV_ITEMS: Item[] = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/agenda", label: "Agenda", icon: CalendarClock },
   { href: "/boekingen", label: "Boekingen", icon: CalendarDays },
-  { href: "/leads", label: "Leads", icon: Heart },
+  { href: "/notificaties", label: "Notificaties", icon: Bell, badgeKey: "unread" },
   { href: "/klanten", label: "Klanten", icon: UserRound },
   { href: "/berichten", label: "Berichten", icon: MessageSquare },
   { href: "/instellingen", label: "Instellingen", icon: Settings },
 ];
 
-export function AdminNav({ email }: { email: string | null }) {
+export function AdminNav({
+  email,
+  unreadCount = 0,
+}: {
+  email: string | null;
+  unreadCount?: number;
+}) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
@@ -38,6 +44,8 @@ export function AdminNav({ email }: { email: string | null }) {
     NAV_ITEMS.map((item) => {
       const active = isActive(item.href);
       const Icon = item.icon;
+      const badge =
+        item.badgeKey === "unread" && unreadCount > 0 ? unreadCount : 0;
       return (
         <Link
           key={item.href}
@@ -47,12 +55,20 @@ export function AdminNav({ email }: { email: string | null }) {
           className={
             "flex items-center gap-2.5 rounded-md px-2.5 py-2 text-sm transition " +
             (active
-              ? "bg-accent font-medium text-accent-foreground"
-              : "text-foreground hover:bg-accent")
+              ? "bg-secondary font-medium text-foreground"
+              : "text-foreground hover:bg-secondary")
           }
         >
           <Icon className="size-4 shrink-0 opacity-70" aria-hidden />
-          {item.label}
+          <span className="flex-1">{item.label}</span>
+          {badge > 0 && (
+            <span
+              aria-label={`${badge} ongelezen`}
+              className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-accent px-1.5 text-[10px] font-medium text-accent-foreground"
+            >
+              {badge > 99 ? "99+" : badge}
+            </span>
+          )}
         </Link>
       );
     });

@@ -253,8 +253,8 @@ export function ChatWidget() {
       <div className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
         {messages.length === 0 && (
           <p className="text-sm text-muted-foreground">
-            Stel gerust je vraag — over een afspraak, bruidsstyling of iets
-            anders. Je kunt ook een foto meesturen.
+            Stel gerust je vraag — over een afspraak of iets anders. Je kunt
+            ook een foto meesturen.
           </p>
         )}
         {messages.map((m) => (

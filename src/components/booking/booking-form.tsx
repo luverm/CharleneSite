@@ -116,8 +116,8 @@ export function BookingForm({
   const prefilledServiceId = prefill?.serviceSlug
     ? (services.find((s) => s.slug === prefill.serviceSlug)?.id ?? null)
     : null;
-  // A pre-chosen service (e.g. a proefsessie booked from the bridal
-  // page) skips the service-picker and starts at the date+time step.
+  // A pre-chosen service (e.g. ?dienst=knippen-dames) skips the
+  // service-picker and starts at the date+time step.
   const [step, setStep] = useState(prefilledServiceId ? 1 : 0);
   const [serviceId, setServiceId] = useState<string | null>(
     prefilledServiceId,

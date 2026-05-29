@@ -7,10 +7,8 @@ import { getClientIp } from "@/lib/request-ip";
 import { requireAdmin } from "@/lib/auth/require-admin";
 import { createSupabaseServiceClient } from "@/lib/supabase/service";
 import { sendEmail } from "@/lib/email/client";
-import {
-  waitlistConfirmationEmail,
-  waitlistAdminText,
-} from "@/lib/email/messages";
+import { waitlistConfirmationEmail } from "@/lib/email/messages";
+import { recordAdminNotification } from "@/lib/db/notifications";
 
 async function notifyWaitlist(d: {
   serviceId?: string;
@@ -49,26 +47,20 @@ async function notifyWaitlist(d: {
     console.error("[waitlist] confirmation mail failed:", err);
   }
 
-  const adminEmail = process.env.ADMIN_NOTIFY_EMAIL;
-  if (adminEmail) {
-    try {
-      await sendEmail({
-        to: adminEmail,
-        subject: "Nieuwe wachtlijst-aanmelding",
-        context: "waitlist_admin",
-        text: waitlistAdminText({
-          fullName: d.fullName,
-          email: d.email,
-          phone: d.phone || null,
-          serviceName,
-          preferredDate: d.preferredDate || null,
-          note: d.note || null,
-        }),
-      });
-    } catch (err) {
-      console.error("[waitlist] admin mail failed:", err);
-    }
-  }
+  await recordAdminNotification({
+    kind: "waitlist_added",
+    title: "Nieuwe wachtlijst-aanmelding",
+    body: [
+      `${d.fullName} <${d.email}>`,
+      d.phone ? `Telefoon: ${d.phone}` : null,
+      `Dienst: ${serviceName ?? "geen voorkeur"}`,
+      d.preferredDate ? `Voorkeursdag: ${d.preferredDate}` : null,
+      d.note ? `Notitie: ${d.note}` : null,
+    ]
+      .filter((l): l is string => l !== null)
+      .join("\n"),
+    href: "/instellingen/wachtlijst",
+  });
 }
 
 const joinSchema = z.object({

@@ -23,7 +23,7 @@ type Svc = {
   id: string;
   name: string;
   duration_min: number;
-  kind: "regular" | "bridal";
+  kind: "regular";
 };
 
 export function AdminBookingForm({
@@ -160,7 +160,6 @@ export function AdminBookingForm({
           {services.map((s) => (
             <option key={s.id} value={s.id}>
               {s.name} ({s.duration_min} min)
-              {s.kind === "bridal" ? " — bruid" : ""}
             </option>
           ))}
         </select>

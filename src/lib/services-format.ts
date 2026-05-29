@@ -4,7 +4,7 @@
 
 import { SERVICE_CATEGORIES, categoryForSlug } from "@/content/services";
 
-export type ServiceKind = "regular" | "bridal";
+export type ServiceKind = "regular";
 
 export type Service = {
   id: string;
@@ -19,8 +19,6 @@ export type Service = {
   sort_order: number;
 };
 
-const KIND_RANK: Record<ServiceKind, number> = { regular: 0, bridal: 1 };
-
 function categoryRank(slug: string): number {
   const cat = categoryForSlug(slug);
   if (!cat) return SERVICE_CATEGORIES.length;
@@ -29,19 +27,15 @@ function categoryRank(slug: string): number {
 }
 
 /**
- * The one canonical service order, used on every page and tool so the
- * list never looks different per surface: regular before bridal, then
- * by UI category (Knippen → Kleuren → Party hair & make-up), then by
+ * Canonical service order: by UI category (Knippen first), then by
  * sort_order, then name. Derived from the slug/category — not solely
  * from the DB sort_order — so it stays logical even if that column is
  * inconsistent.
  */
 export function compareServices(
-  a: Pick<Service, "slug" | "kind" | "sort_order" | "name">,
-  b: Pick<Service, "slug" | "kind" | "sort_order" | "name">,
+  a: Pick<Service, "slug" | "sort_order" | "name">,
+  b: Pick<Service, "slug" | "sort_order" | "name">,
 ): number {
-  const k = KIND_RANK[a.kind] - KIND_RANK[b.kind];
-  if (k !== 0) return k;
   const c = categoryRank(a.slug) - categoryRank(b.slug);
   if (c !== 0) return c;
   const s = a.sort_order - b.sort_order;

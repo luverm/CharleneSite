@@ -20,7 +20,7 @@ export type ServiceUpsert = {
   slug: string;
   name: string;
   description: string | null;
-  kind: "regular" | "bridal";
+  kind: "regular";
   duration_min: number;
   buffer_min: number;
   price_cents: number;

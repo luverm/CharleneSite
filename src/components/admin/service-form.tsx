@@ -121,18 +121,8 @@ export function ServiceForm({
         <Textarea id="description" rows={3} {...form.register("description")} />
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-3">
-        <div>
-          <Label htmlFor="kind">Type</Label>
-          <select
-            id="kind"
-            {...form.register("kind")}
-            className="block h-9 w-full rounded-md border bg-background px-2 text-sm"
-          >
-            <option value="regular">Regulier</option>
-            <option value="bridal">Bruid</option>
-          </select>
-        </div>
+      <input type="hidden" {...form.register("kind")} />
+      <div className="grid gap-3 sm:grid-cols-2">
         <div>
           <Label htmlFor="duration_min">Duur (min)</Label>
           <Input

@@ -140,7 +140,7 @@ export function InvoicesList({
                     </Link>
                     <p className="text-xs text-muted-foreground">
                       {inv.issued_on} ·{" "}
-                      {inv.booking_id ? "Boeking" : "Bruid"}
+                      {inv.booking_id ? "Boeking" : "Handmatig"}
                     </p>
                   </div>
                 </div>
@@ -209,7 +209,7 @@ export function InvoicesList({
                   </td>
                   <td className="px-4 py-3">{inv.customer_name}</td>
                   <td className="px-4 py-3 text-muted-foreground">
-                    {inv.booking_id ? "Boeking" : "Bruid"}
+                    {inv.booking_id ? "Boeking" : "Handmatig"}
                   </td>
                   <td className="px-4 py-3 text-right tabular-nums">
                     {formatPrice(inv.total_cents)}

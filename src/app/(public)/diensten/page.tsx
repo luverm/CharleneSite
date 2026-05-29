@@ -76,14 +76,12 @@ export default async function DienstenPage() {
       </header>
 
       {groups.map((g) => {
-        const allBridal =
-          g.items.length > 0 && g.items.every((s) => s.kind === "bridal");
         return (
           <section key={g.key} className="mt-16">
             <div className="flex items-baseline justify-between gap-4 border-b border-border pb-4">
               <h2 className="text-3xl tracking-tight">{g.label}</h2>
               <span className="text-xs uppercase tracking-wider text-muted-foreground">
-                {allBridal ? "Op aanvraag" : "Direct online boekbaar"}
+                Direct online boekbaar
               </span>
             </div>
             <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

@@ -42,7 +42,6 @@ export default async function DienstenAdminPage() {
     (s) => !knownCat.has(categoryMap[s.id] ?? ""),
   );
   const regular = services.filter((s) => s.kind === "regular");
-  const bridal = services.filter((s) => s.kind === "bridal");
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-8">
@@ -109,47 +108,23 @@ export default async function DienstenAdminPage() {
           )}
         </>
       ) : (
-        <>
-          <section className="mt-8">
-            <h2 className="text-sm font-medium text-muted-foreground">
-              Regulier
-            </h2>
-            <div className="mt-3">
-              {regular.length === 0 ? (
-                <p className="text-sm text-muted-foreground">
-                  Geen reguliere diensten.
-                </p>
-              ) : (
-                <ServiceList
-                  key={sig(regular)}
-                  services={regular}
-                  featuredIds={featuredIds}
-                  colors={colors}
-                />
-              )}
-            </div>
-          </section>
-
-          <section className="mt-8">
-            <h2 className="text-sm font-medium text-muted-foreground">
-              Bruid
-            </h2>
-            <div className="mt-3">
-              {bridal.length === 0 ? (
-                <p className="text-sm text-muted-foreground">
-                  Geen bruidsdiensten.
-                </p>
-              ) : (
-                <ServiceList
-                  key={sig(bridal)}
-                  services={bridal}
-                  featuredIds={featuredIds}
-                  colors={colors}
-                />
-              )}
-            </div>
-          </section>
-        </>
+        <section className="mt-8">
+          <h2 className="text-sm font-medium text-muted-foreground">Diensten</h2>
+          <div className="mt-3">
+            {regular.length === 0 ? (
+              <p className="text-sm text-muted-foreground">
+                Nog geen diensten.
+              </p>
+            ) : (
+              <ServiceList
+                key={sig(regular)}
+                services={regular}
+                featuredIds={featuredIds}
+                colors={colors}
+              />
+            )}
+          </div>
+        </section>
       )}
     </div>
   );

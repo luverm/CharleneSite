@@ -180,31 +180,7 @@ export function reviewRequestEmail(args: {
   });
 }
 
-/* ─── Admin notices & chat links (fixed text) ─── */
-
-export function waitlistAdminText(args: {
-  fullName: string;
-  email: string;
-  phone?: string | null;
-  serviceName?: string | null;
-  preferredDate?: string | null;
-  note?: string | null;
-}): string {
-  return [
-    "Nieuwe wachtlijst-aanmelding",
-    "",
-    `Naam: ${args.fullName}`,
-    `E-mail: ${args.email}`,
-    args.phone ? `Telefoon: ${args.phone}` : null,
-    `Dienst: ${args.serviceName ?? "geen voorkeur"}`,
-    `Voorkeursdag: ${
-      args.preferredDate ? dutchDate(args.preferredDate) : "geen voorkeur"
-    }`,
-    args.note ? `Notitie: ${args.note}` : null,
-  ]
-    .filter((line) => line !== null)
-    .join("\n");
-}
+/* ─── Chat links (fixed text) ─── */
 
 export function chatResumeText(args: {
   customerName: string | null;
@@ -258,29 +234,5 @@ export function googleCalendarUrl(args: {
   if (args.details) params.set("details", args.details);
   if (args.location) params.set("location", args.location);
   return `https://calendar.google.com/calendar/render?${params.toString()}`;
-}
-
-export function bookingAdminText(args: {
-  serviceName: string;
-  startsAt: Date;
-  customerName: string;
-  customerEmail: string;
-  customerPhone: string;
-  notes?: string;
-  bookingUrl: string;
-}): string {
-  return [
-    "Nieuwe boeking",
-    "",
-    `Wanneer: ${formatHumanDateTime(args.startsAt)}`,
-    `Dienst: ${args.serviceName}`,
-    `Klant: ${args.customerName} <${args.customerEmail}>`,
-    `Telefoon: ${args.customerPhone}`,
-    args.notes ? `Notitie: ${args.notes}` : null,
-    "",
-    `Open in admin: ${args.bookingUrl}`,
-  ]
-    .filter((line) => line !== null)
-    .join("\n");
 }
 

@@ -3,11 +3,12 @@ import { sendEmail } from "@/lib/email/client";
 import {
   bookingConfirmationEmail,
   bookingRescheduledEmail,
-  bookingAdminText,
   googleCalendarUrl,
 } from "@/lib/email/messages";
 import { bookingIcs } from "@/lib/email/ics";
 import { signBooking } from "@/lib/booking-token";
+import { recordAdminNotification } from "@/lib/db/notifications";
+import { formatHumanDateTime } from "@/lib/time";
 import { business } from "@/content/business";
 
 type Customer = {
@@ -65,27 +66,19 @@ export async function sendBookingConfirmation(m: BookingMail): Promise<void> {
   });
 }
 
-/** Admin notice of a new booking. No-ops if ADMIN_NOTIFY_EMAIL is unset. */
+/** In-app notification when a new booking comes in. */
 export async function sendBookingAdminNotice(m: BookingMail): Promise<void> {
-  const adminEmail = process.env.ADMIN_NOTIFY_EMAIL;
-  if (!adminEmail) {
-    console.warn("[email] ADMIN_NOTIFY_EMAIL not set — admin notice skipped");
-    return;
-  }
-  await sendEmail({
-    to: adminEmail,
-    subject: `Nieuwe boeking — ${m.serviceName}`,
-    context: "booking_admin",
-    text: bookingAdminText({
-      serviceName: m.serviceName,
-      startsAt: m.startsAt,
-      customerName: m.customer.fullName,
-      customerEmail: m.customer.email,
-      customerPhone: m.customer.phone,
-      notes: m.customer.notes,
-      bookingUrl: `${siteUrl()}/boekingen/${m.bookingId}`,
-    }),
-    replyTo: m.customer.email,
+  const lines = [
+    `${m.customer.fullName} (${m.customer.email})`,
+    `Wanneer: ${formatHumanDateTime(m.startsAt)}`,
+    m.customer.phone ? `Telefoon: ${m.customer.phone}` : null,
+    m.customer.notes ? `Notitie: ${m.customer.notes}` : null,
+  ].filter((l): l is string => l !== null);
+  await recordAdminNotification({
+    kind: "booking_created",
+    title: `Nieuwe boeking — ${m.serviceName}`,
+    body: lines.join("\n"),
+    href: `/boekingen/${m.bookingId}`,
   });
 }
 
