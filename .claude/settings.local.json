@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cp \"/root/.claude/uploads/5bf4933e-a0b3-486e-805d-53973478a3ca/1d8013aa-Brochure_202526_1.pdf\" public/brochure-bruidsstyling.pdf)",
+      "Bash(cp \"/root/.claude/uploads/5bf4933e-a0b3-486e-805d-53973478a3ca/43f19e7c-Brochure_202526.pdf\" public/proefkapsel-info.pdf)"
+    ]
+  }
+}
