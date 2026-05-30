@@ -1,13 +1,15 @@
 "use client";
 
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { format } from "date-fns";
 import { toast } from "sonner";
 import {
   DndContext,
+  DragOverlay,
   type DragEndEvent,
+  type DragStartEvent,
   PointerSensor,
   pointerWithin,
   useSensor,
@@ -15,7 +17,6 @@ import {
   useDraggable,
   useDroppable,
 } from "@dnd-kit/core";
-import { CSS } from "@dnd-kit/utilities";
 import type { BookingListItem } from "@/lib/db/admin-bookings";
 import type { TimeOffRow } from "@/lib/db/admin-schedule";
 import { agendaBlockClass } from "@/lib/agenda-colors";
@@ -82,15 +83,34 @@ export function AgendaTimeGrid({
 }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
+  const [activeBooking, setActiveBooking] = useState<BookingListItem | null>(
+    null,
+  );
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
   );
 
   const allBookings = Array.from(byDay.values()).flat();
 
+  // Colour key for an appointment block; shared by the in-grid block and the
+  // drag overlay so the dragged ghost looks identical.
+  const blockClassFor = (b: BookingListItem) =>
+    b.status === "no_show"
+      ? EVENT_STYLE.no_show
+      : (agendaBlockClass(serviceColors[b.service_id]) ??
+        EVENT_STYLE[b.status] ??
+        "border-l-stone-400 bg-stone-50");
+
+  function onDragStart(event: DragStartEvent) {
+    const id = String(event.active.id);
+    if (!id.startsWith("b:")) return;
+    setActiveBooking(allBookings.find((b) => b.id === id.slice(2)) ?? null);
+  }
+
   // A booking dropped on a 30-minute slot is rescheduled to that time,
   // keeping its current length.
   function onDragEnd(event: DragEndEvent) {
+    setActiveBooking(null);
     const { active, over } = event;
     if (!over) return;
     const activeId = String(active.id);
@@ -208,7 +228,10 @@ export function AgendaTimeGrid({
       <DndContext
         sensors={sensors}
         collisionDetection={pointerWithin}
+        onDragStart={onDragStart}
         onDragEnd={onDragEnd}
+        onDragCancel={() => setActiveBooking(null)}
+        autoScroll={{ threshold: { x: 0.15, y: 0.2 }, acceleration: 12 }}
       >
         <div
           className={
@@ -372,19 +395,13 @@ export function AgendaTimeGrid({
                         48,
                         (endMin - startMin) * perMin,
                       );
-                      const blockClass =
-                        b.status === "no_show"
-                          ? EVENT_STYLE.no_show
-                          : (agendaBlockClass(serviceColors[b.service_id]) ??
-                            EVENT_STYLE[b.status] ??
-                            "border-l-stone-400 bg-stone-50");
                       return (
                         <DraggableBooking
                           key={b.id}
                           booking={b}
                           top={top}
                           minHeight={minHeight}
-                          blockClass={blockClass}
+                          blockClass={blockClassFor(b)}
                         />
                       );
                     })}
@@ -394,8 +411,40 @@ export function AgendaTimeGrid({
             </div>
           </div>
         </div>
+
+        <DragOverlay dropAnimation={null}>
+          {activeBooking ? (
+            <div
+              className={
+                "h-full w-full cursor-grabbing rounded-md border border-l-4 px-2 py-1 text-xs leading-tight shadow-lg " +
+                blockClassFor(activeBooking)
+              }
+            >
+              <BookingCardContent booking={activeBooking} />
+            </div>
+          ) : null}
+        </DragOverlay>
       </DndContext>
     </div>
+  );
+}
+
+/** The visual content of a booking block, shared by the grid block and the
+ * drag overlay so the dragged ghost matches exactly. */
+function BookingCardContent({ booking }: { booking: BookingListItem }) {
+  return (
+    <>
+      <p className="font-medium text-foreground">
+        {formatTime(new Date(booking.starts_at))} –{" "}
+        {formatTime(new Date(booking.ends_at))}
+      </p>
+      <p className="font-medium break-words">
+        {booking.customer?.full_name ?? "—"}
+      </p>
+      <p className="break-words text-muted-foreground">
+        {booking.service?.name ?? ""}
+      </p>
+    </>
   );
 }
 
@@ -445,39 +494,29 @@ function DraggableBooking({
   minHeight: number;
   blockClass: string;
 }) {
-  const { attributes, listeners, setNodeRef, transform, isDragging } =
-    useDraggable({ id: `b:${booking.id}` });
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+    id: `b:${booking.id}`,
+  });
 
-  const style: React.CSSProperties = {
-    top,
-    minHeight,
-    transform: transform ? CSS.Translate.toString(transform) : undefined,
-    zIndex: isDragging ? 30 : undefined,
-    opacity: isDragging ? 0.85 : undefined,
-  };
+  // No transform here: while dragging, the DragOverlay tracks the cursor 1:1
+  // and this in-grid block stays put as a dimmed placeholder.
+  const style: React.CSSProperties = { top, minHeight };
 
   return (
     <Link
       ref={setNodeRef}
       href={`/boekingen/${booking.id}`}
       style={style}
+      aria-hidden={isDragging}
       {...listeners}
       {...attributes}
       className={
         "absolute inset-x-1 z-[1] touch-none cursor-grab rounded-md border border-l-4 px-2 py-1 text-xs leading-tight shadow-sm transition hover:z-10 hover:shadow active:cursor-grabbing " +
+        (isDragging ? "opacity-40 " : "") +
         blockClass
       }
     >
-      <p className="font-medium text-foreground">
-        {formatTime(new Date(booking.starts_at))} –{" "}
-        {formatTime(new Date(booking.ends_at))}
-      </p>
-      <p className="font-medium break-words">
-        {booking.customer?.full_name ?? "—"}
-      </p>
-      <p className="break-words text-muted-foreground">
-        {booking.service?.name ?? ""}
-      </p>
+      <BookingCardContent booking={booking} />
     </Link>
   );
 }
