@@ -1,7 +1,8 @@
 import { z } from "zod";
 
-const serverSchema = z.object({
-  SUPABASE_SERVICE_ROLE_KEY: z.string().min(1),
+const serviceRoleKeySchema = z.string().min(1);
+
+const icsSchema = z.object({
   ADMIN_ICS_TOKEN: z.string().min(16),
 });
 
@@ -19,13 +20,29 @@ const clientEnv = clientSchema.parse({
 
 export const publicEnv = clientEnv;
 
+/**
+ * The Supabase service-role key — the ONLY server secret the service client
+ * needs. Validated on its own so unrelated server config (e.g. the ICS token)
+ * can never break every admin read/write by throwing here.
+ */
+export function getServiceRoleKey(): string {
+  if (typeof window !== "undefined") {
+    throw new Error("getServiceRoleKey must not be called from the browser");
+  }
+  return serviceRoleKeySchema.parse(process.env.SUPABASE_SERVICE_ROLE_KEY);
+}
+
+/**
+ * Server config for the ICS calendar feed (feed route, seed route, agenda
+ * settings page). Only call this where the ICS token is genuinely needed —
+ * not for general DB access.
+ */
 export function getServerEnv() {
   if (typeof window !== "undefined") {
     throw new Error("getServerEnv must not be called from the browser");
   }
-  return serverSchema.parse({
-    SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
-    ADMIN_NOTIFY_EMAIL: process.env.ADMIN_NOTIFY_EMAIL,
-    ADMIN_ICS_TOKEN: process.env.ADMIN_ICS_TOKEN,
-  });
+  return {
+    SUPABASE_SERVICE_ROLE_KEY: getServiceRoleKey(),
+    ...icsSchema.parse({ ADMIN_ICS_TOKEN: process.env.ADMIN_ICS_TOKEN }),
+  };
 }
